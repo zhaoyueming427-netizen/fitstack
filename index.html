@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FitStack — AI Workout Planner</title>
+<meta name="description" content="FitStack is an intelligent workout planner. AI-generated weekly plans, video library, and immersive player — train smarter, every day.">
+<link rel="icon" type="image/png" href="img/icon.png">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --text:    #13141C;
+    --primary: #4F5FF7;
+    --bg:      #F7F8FC;
+    --muted:   #6B7280;
+    --border:  #E5E7EB;
+    --white:   #FFFFFF;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Helvetica Neue', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---------- Screen ---------- */
+  .screen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .screen-inner {
+    width: 100%;
+    max-width: 1920px;
+    padding: 100px;
+  }
+
+  /* ---------- Typography ---------- */
+  h1 {
+    font-size: clamp(40px, 6vw, 80px);
+    font-weight: 900;
+    letter-spacing: -1px;
+    line-height: 1.05;
+    margin-bottom: 20px;
+  }
+  h1 span { color: var(--primary); }
+
+  h2 {
+    font-size: clamp(32px, 4.5vw, 64px);
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+  }
+
+  .muted { color: var(--muted); }
+
+  /* ---------- Hero (left text / right shots) ---------- */
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .hero-text .icon {
+    width: clamp(56px, 7vw, 88px);
+    height: clamp(56px, 7vw, 88px);
+    border-radius: 18px;
+    margin-bottom: 32px;
+  }
+  .hero-text .desc {
+    font-size: clamp(16px, 2vw, 24px);
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 40px;
+  }
+  .hero-text .coming {
+    font-size: clamp(13px, 1.4vw, 17px);
+    color: var(--muted);
+  }
+
+  .hero-shots {
+    display: flex;
+    gap: 36px;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  .hero-shots .shot {
+    width: clamp(180px, 22vw, 400px);
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow:
+      0 0 0 1px rgba(0,0,0,0.04),
+      0 2px 8px rgba(0,0,0,0.04),
+      0 8px 32px rgba(0,0,0,0.06);
+  }
+  .hero-shots .shot img {
+    width: 100%;
+    display: block;
+  }
+  .hero-shots .shot:first-child {
+    margin-top: 32px;
+  }
+
+  /* ---------- Features ---------- */
+  .features {
+    text-align: center;
+  }
+  .features h2 {
+    margin-bottom: 12px;
+  }
+  .features .sub {
+    font-size: clamp(15px, 1.8vw, 22px);
+    color: var(--muted);
+    margin-bottom: 72px;
+  }
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+  }
+  .feature-card {
+    background: var(--white);
+    border-radius: 24px;
+    padding: 56px 32px 48px;
+    border: 1px solid var(--border);
+    text-align: center;
+  }
+  .feature-card .icon {
+    width: 72px; height: 72px;
+    border-radius: 18px;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    margin: 0 auto 28px;
+  }
+  .feature-card h3 {
+    font-size: clamp(18px, 1.8vw, 24px);
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .feature-card p {
+    font-size: clamp(14px, 1.3vw, 17px);
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* ---------- Bottom (Privacy + Footer) ---------- */
+  .bottom {
+    padding: 100px 0 60px;
+  }
+  .bottom-inner {
+    width: 100%;
+    max-width: 1920px;
+    margin: 0 auto;
+    padding: 0 100px;
+  }
+  .bottom h2 {
+    margin-bottom: 56px;
+    text-align: center;
+  }
+  .privacy-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    margin-bottom: 60px;
+  }
+  .privacy-grid h3 {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .privacy-grid p, .privacy-grid li {
+    font-size: clamp(15px, 1.4vw, 18px);
+    color: var(--text);
+    line-height: 1.8;
+  }
+  .privacy-grid ul {
+    list-style: none;
+    padding: 0;
+  }
+  .privacy-grid li {
+    margin-bottom: 8px;
+  }
+  .privacy-grid li::before {
+    content: "— ";
+    color: var(--muted);
+  }
+
+  .bottom footer {
+    text-align: center;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+  }
+  .bottom footer .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .bottom footer .brand img {
+    width: 24px; height: 24px;
+    border-radius: 6px;
+  }
+  .bottom footer p {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 768px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+      gap: 40px;
+      text-align: center;
+    }
+    .hero-shots {
+      justify-content: center;
+    }
+    .hero-shots .shot {
+      width: clamp(120px, 38vw, 180px);
+      border-radius: 20px;
+    }
+    .feature-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .privacy-grid {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+    .screen-inner, .bottom-inner {
+      padding: 60px 24px;
+    }
+    .bottom-inner {
+      padding: 60px 24px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .feature-grid {
+      grid-template-columns: 1fr;
+    }
+    .hero-shots .shot {
+      width: 110px;
+      border-radius: 16px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- ====== HERO ====== -->
+<section class="screen hero">
+  <div class="screen-inner">
+    <div class="hero-grid">
+      <div class="hero-text">
+        <img src="img/icon.png" alt="FitStack" class="icon">
+        <h1>Your <span>AI</span><br>workout partner</h1>
+        <p class="desc">Personalized weekly plans, a curated video library, and an immersive player — built for the way you train.</p>
+        <p class="coming">Coming soon to the App Store</p>
+      </div>
+      <div class="hero-shots">
+        <div class="shot">
+          <img src="img/screenshot-1.png" alt="Home Screen">
+        </div>
+        <div class="shot">
+          <img src="img/screenshot-2.png" alt="Planner">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== FEATURES ====== -->
+<section class="screen features">
+  <div class="screen-inner">
+    <h2>Everything you need</h2>
+    <p class="sub">Four modules, one seamless experience.</p>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="icon">📅</div>
+        <h3>AI Planner</h3>
+        <p>Generate a weekly plan in one tap. Reorder, edit, or delete — your week, your rules.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">🔍</div>
+        <h3>Video Library</h3>
+        <p>Browse exercises by category. Search, filter, and add to your day with a single tap.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">▶️</div>
+        <h3>Workout Player</h3>
+        <p>Full-screen immersive mode with a timer and progress tracker. Stay in the zone.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">⚡</div>
+        <h3>Polished UX</h3>
+        <p>Spring animations, haptic feedback, dark mode. Every detail tuned for feel.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== PRIVACY + FOOTER ====== -->
+<section class="bottom">
+  <div class="bottom-inner">
+    <h2>Privacy</h2>
+    <div class="privacy-grid">
+      <div>
+        <h3>We don't collect anything</h3>
+        <p>FitStack runs entirely on your device. No accounts, no servers, no analytics SDKs. Your workout data never leaves your phone.</p>
+      </div>
+      <div>
+        <h3>What stays local</h3>
+        <ul>
+          <li>Training plans &amp; preferences</li>
+          <li>Workout history &amp; progress</li>
+          <li>All app settings</li>
+        </ul>
+        <p style="font-size:13px;color:var(--muted);margin-top:16px;">Uninstalling the app removes everything. No copies, no backups, no trace.</p>
+      </div>
+    </div>
+
+    <footer>
+      <p class="brand">
+        <img src="img/icon.png" alt="">
+        FitStack
+      </p>
+      <p>© 2026 FitStack &nbsp;·&nbsp; Built with SwiftUI &nbsp;·&nbsp; Zero third-party dependencies</p>
+    </footer>
+  </div>
+</section>
+
+</body>
+</html>
